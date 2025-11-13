@@ -1,10 +1,68 @@
 <template>
   <div class="center-panel">
-    <div class="center-panel-content">center-panel</div>
+    <div id="myEChartsBar"></div>
+    <div id="myEChartsLine"></div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref, onMounted, inject, nextTick } from 'vue'
+
+const echarts = inject('echarts')
+
+onMounted(() => {
+  nextTick(() => {
+    changeBar()
+    changeLine()
+  })
+})
+
+const changeBar = () => {
+  const myEChart = echarts.init(document.getElementById('myEChartsBar'))
+  const option = {
+    xAxis: {
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    },
+    yAxis: {},
+    series: [
+      {
+        type: 'bar',
+        data: [23, 24, 18, 25, 27, 28, 25],
+      },
+    ],
+  }
+  myEChart.setOption(option)
+  window.addEventListener('resize', () => {
+    myEChart.resize()
+  })
+}
+
+const changeLine = () => {
+  const myEChart = echarts.init(document.getElementById('myEChartsLine'))
+  const option = {
+    xAxis: {
+      data: ['A', 'B', 'C', 'D', 'E'],
+    },
+    yAxis: {},
+    series: [
+      {
+        data: [10, 22, 28, 43, 49],
+        type: 'line',
+        stack: 'x',
+      },
+      {
+        data: [5, 4, 3, 5, 10],
+        type: 'line',
+        stack: 'x',
+      },
+    ],
+  }
+  myEChart.setOption(option)
+  window.addEventListener('resize', () => {
+    myEChart.resize()
+  })
+}
+</script>
 
 <style lang="scss" scoped>
 .center-panel {
@@ -14,17 +72,13 @@
   justify-content: center;
   align-items: center;
 
-  .center-panel-content {
+  #myEChartsBar {
     width: 100%;
-    height: 100%;
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    font-weight: bold;
+    height: 500px;
+  }
+  #myEChartsLine {
+    width: 100%;
+    height: 500px;
   }
 }
 </style>
